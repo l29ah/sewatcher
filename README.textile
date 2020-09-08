@@ -1,0 +1,11 @@
+h1. Parser and notifier for Shadow Empire save files
+
+Shadow Empire is an interesting, but extremely poorly written game. Only multiplayer it supports is Play By EMail, and it does not feature any real security in it.
+
+So, one can play games using sync tools like syncthing, but how to notify other players to make their turn?
+
+This Linux tool watches a directory given as first argument for changes to .se1 files (moved_to, as synthing does it) and notifies you using @notify-send@ when your turn is up. To be notified of your turn only, add "save.se1.me" file with your turn number.
+
+h2. What is the password to Shadow Empire save files?
+
+Shadow Empire saves are ZIP archives with single serialized file. Password is "GarfieldJonesCat".
