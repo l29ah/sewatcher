@@ -23,21 +23,35 @@ def get_turn(filename)
 	d[turn_pos].ord
 end
 
+def your_number(savefile)
+	if File.exists? "#{savefile}.me" then File.read("#{savefile}.me").to_i else nil end
+end
 
 
 notifier = INotify::Notifier.new
 
 initial_message = "separser initialized\n"
 
+$saves = Hash.new
+
+
 Dir.glob("#{ARGV[0]}/*.se1") do |savefile|
 	turn = get_turn(savefile)
-	initial_message << "#{get_savename(savefile)}: turn for #{get_turn(savefile)}\n"
+	$saves[get_savename(savefile)] = turn
+	itsyou = if your_number(savefile) == turn then " (you)" else "" end
+	initial_message << "#{get_savename(savefile)}: turn for #{turn}#{itsyou}\n"
 end
 
 system("notify-send", initial_message)
 
-exit
-
 notifier.watch(ARGV[0], :moved_to) do |event|
-	
+	fname = "#{ARGV[0]}/#{event.name}"
+	turn = get_turn(fname)
+	you = your_number(fname)
+	if $saves[event.name] != turn && (!you || turn == you)
+		itsyou = if you == turn then " (you)" else "" end
+		system("notify-send", "#{event.name}: turn #{turn}#{itsyou}")
+	end
 end
+
+notifier.run
