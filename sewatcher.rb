@@ -24,7 +24,7 @@ def get_turn(filename)
 end
 
 def your_number(savefile)
-	if File.exists? "#{savefile}.me" then File.read("#{savefile}.me").to_i else nil end
+	$mynumbers[savefile]
 end
 
 
@@ -33,7 +33,12 @@ notifier = INotify::Notifier.new
 initial_message = "separser initialized\n"
 
 $saves = Hash.new
+$mynumbers = Hash.new
 
+ARGV[1..-1].each do |myn|
+	save,number = myn.split(":")
+	$mynumbers[save] = number.to_i
+end
 
 Dir.glob("#{ARGV[0]}/*.se1") do |savefile|
 	turn = get_turn(savefile)

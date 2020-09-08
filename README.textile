@@ -4,7 +4,7 @@ h1. Parser and notifier for Shadow Empire save files
 
 So, one can play improvised play-by-cloud games using sync tools like syncthing:"https://syncthing.net/", but how to notify other players to make their turn?
 
-This Linux tool watches a directory given as first argument for changes to .se1 files (moved_to, as syncthing does it) and notifies you using @notify-send@ when your turn is up. To be notified of your turn only, add "save.se1.me" file with your turn number.
+This Linux tool watches a directory given as first argument for changes to .se1 files (moved_to, as syncthing does it) and notifies you using @notify-send@ when your turn is up. To be notified of your turn only, add strings like "save.se1:3" to your command line, where "save.se1" is save name and 3 is your number.
 
 h2. What is the password to Shadow Empire save files?
 
