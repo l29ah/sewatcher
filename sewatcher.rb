@@ -30,7 +30,6 @@ end
 
 notifier = INotify::Notifier.new
 
-initial_message = "separser initialized\n"
 
 $saves = Hash.new
 $mynumbers = Hash.new
@@ -40,11 +39,13 @@ ARGV[1..-1].each do |myn|
 	$mynumbers[save] = number.to_i
 end
 
+initial_message = "sewatcher initialized\n"
+
 Dir.glob("#{ARGV[0]}/*.se1") do |savefile|
 	turn = get_turn(savefile)
 	$saves[get_savename(savefile)] = turn
 	itsyou = if your_number(savefile) == turn then " (you)" else "" end
-	initial_message << "#{get_savename(savefile)}: turn for #{turn}#{itsyou}\n"
+	initial_message << "[#{get_savename(savefile)}] player #{turn}#{itsyou}\n"
 end
 
 system("notify-send", initial_message)
@@ -55,7 +56,7 @@ notifier.watch(ARGV[0], :moved_to) do |event|
 	you = your_number(event.name)
 	if $saves[event.name] != turn && (!you || turn == you)
 		itsyou = if you == turn then " (you)" else "" end
-		system("notify-send", "#{event.name}: #{turn}#{itsyou}")
+		system("notify-send", "sewatcher: [#{event.name}] player #{turn}#{itsyou}")
 	end
 end
 
