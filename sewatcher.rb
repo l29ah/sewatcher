@@ -52,10 +52,10 @@ system("notify-send", initial_message)
 notifier.watch(ARGV[0], :moved_to) do |event|
 	fname = "#{ARGV[0]}/#{event.name}"
 	turn = get_turn(fname)
-	you = your_number(fname)
+	you = your_number(event.name)
 	if $saves[event.name] != turn && (!you || turn == you)
 		itsyou = if you == turn then " (you)" else "" end
-		system("notify-send", "#{event.name}: turn #{turn}#{itsyou}")
+		system("notify-send", "#{event.name}: #{turn}#{itsyou}")
 	end
 end
 
