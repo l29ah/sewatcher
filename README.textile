@@ -2,7 +2,7 @@ h1. Parser and notifier for Shadow Empire save files
 
 "Shadow Empire":https://www.matrixgames.com/game/shadow-empire is an interesting, but poorly written game. Only multiplayer it supports is Play By EMail, and it does not feature any real security in it.
 
-So, one can play improvised play-by-cloud games using sync tools like syncthing:"https://syncthing.net/", but how to notify other players to make their turn?
+So, one can play improvised play-by-cloud games using sync tools like "syncthing":https://syncthing.net, but how to notify other players to make their turn?
 
 One solution would be to watch for file changes, but 1. SE overwrites file on load for no reason at all, thus making sync noise, 2. What if there are more than two players?
 
