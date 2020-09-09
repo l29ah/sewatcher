@@ -6,7 +6,7 @@ So, one can play improvised play-by-cloud games using sync tools like "syncthing
 
 One solution would be to watch for file changes, but 1. SE overwrites file on load for no reason at all, thus making sync noise, 2. What if there are more than two players?
 
-This Linux tool watches a directory given as first argument for changes to .se1 files (moved_to, as syncthing does it), parses save files when they arrive for turn number, and notifies you using @notify-send@ when your turn is up. To be notified of your turn only, add strings like "save.se1:3" to your command line, where "save.se1" is save name and 3 is your number.
+This Linux tool watches a directory given as first argument for changes to .se1 files, parses save files when they arrive for turn number, and notifies you using @notify-send@ when your turn is up. To be notified of your turn only, add strings like "save.se1:3" to your command line, where "save.se1" is save name and 3 is your number.
 
 h2. Known Issues
 
