@@ -6,7 +6,7 @@ require 'pathname'
 
 def get_savename(filename)
 	pt = Pathname.new(filename)
-	pt.basename
+	pt.basename.to_s
 end
 
 def get_turn(filename)
@@ -43,9 +43,10 @@ initial_message = "sewatcher initialized\n"
 
 Dir.glob("#{ARGV[0]}/*.se1") do |savefile|
 	turn = get_turn(savefile)
-	$saves[get_savename(savefile)] = turn
-	itsyou = if your_number(savefile) == turn then " (you)" else "" end
-	initial_message << "[#{get_savename(savefile)}] player #{turn}#{itsyou}\n"
+	savename = get_savename(savefile)
+	itsyou = if your_number(savename) == turn then " (you)" else "" end
+	$saves[savename] = turn
+	initial_message << "[#{savename}] player #{turn}#{itsyou}\n"
 end
 
 system("notify-send", initial_message)
