@@ -62,9 +62,9 @@ notifier.watch(ARGV[0], :moved_to, :close_write) do |event|
 	turn = get_turn(fname)
 	next unless turn
 	you = your_number(event.name)
+	$saves[event.name] = turn
 	if $saves[event.name] != turn && (!you || turn == you)
 		itsyou = if you == turn then " (you)" else "" end
-		$saves[event.name] = turn
 		system("notify-send", "sewatcher: [#{event.name}] player #{turn}#{itsyou}")
 	end
 end
