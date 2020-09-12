@@ -4,6 +4,7 @@
 require 'rb-inotify'
 require 'pathname'
 require 'open3'
+require 'optparse'
 
 def get_savename(filename)
 	pt = Pathname.new(filename)
@@ -32,6 +33,15 @@ def your_number(savefile)
 end
 
 
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{$0} [options]"
+
+  opts.on("-p", "--parse", "Parse all save files once, output to console and exit") do |v|
+    options[:parse] = true
+  end
+end.parse!
+
 notifier = INotify::Notifier.new
 
 
@@ -52,6 +62,11 @@ Dir.glob("#{ARGV[0]}/*.se1") do |savefile|
 	itsyou = if your_number(savename) == turn then " (you)" else "" end
 	$saves[savename] = turn
 	initial_message << "[#{savename}] player #{turn}#{itsyou}\n"
+end
+
+if options[:parse]
+	puts initial_message
+	exit
 end
 
 system("notify-send", initial_message)
