@@ -35,11 +35,15 @@ end
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: #{$0} [options]"
+	opts.banner = "Notifies you of new turns in Shadow Empire games in given dirs.
+	Usage: #{$0} [options] <savedir> [<savename:playerno> ...]"
 
-  opts.on("-p", "--parse", "Parse all save files once, output to console and exit") do |v|
-    options[:parse] = true
-  end
+	opts.on("-p", "--parse", "Parse all save files once, output to console and exit") do |v|
+		options[:parse] = true
+	end
+	opts.on("-a", "--all", "Watch all save files, not only listed ones") do |v|
+		options[:all] = true
+	end
 end.parse!
 
 notifier = INotify::Notifier.new
@@ -50,6 +54,7 @@ $mynumbers = Hash.new
 
 ARGV[1..-1].each do |myn|
 	save,number = myn.split(":")
+	number = :any if !number
 	$mynumbers[save] = number.to_i
 end
 
@@ -77,7 +82,8 @@ notifier.watch(ARGV[0], :moved_to, :close_write) do |event|
 	turn = get_turn(fname)
 	next unless turn
 	you = your_number(event.name)
-	if $saves[event.name] != turn && (!you || turn == you)
+	
+	if $saves[event.name] != turn && (options[:all] || you == turn || you == :all)
 		itsyou = if you == turn then " (you)" else "" end
 		system("notify-send", "sewatcher: [#{event.name}] player #{turn}#{itsyou}")
 	end
