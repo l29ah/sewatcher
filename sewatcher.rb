@@ -32,17 +32,35 @@ def your_number(savefile)
 	$mynumbers[savefile]
 end
 
+def do_notification(text)
+	if $options[:stdout]
+		puts text
+	end
+	if !$options[:no_notify]
+		system("notify-send", "sewatcher: #{text}")
+	end
+end
 
-options = {}
+
+$options = {}
 OptionParser.new do |opts|
 	opts.banner = "Notifies you of new turns in Shadow Empire games in given dirs.
-	Usage: #{$0} [options] <savedir> [<savename:playerno> ...]"
+	Usage: #{$0} [$options] <savedir> [<savename:playerno> ...]"
 
-	opts.on("-p", "--parse", "Parse all save files once, output to console and exit") do |v|
-		options[:parse] = true
+	opts.on("-p", "--parse", "Parse all save files once, notify and exit") do |v|
+		$options[:parse] = true
 	end
+	
+	opts.on("-n", "--no-notify", "Don't notify-send") do |v|
+		$options[:no_notify] = true
+	end
+	
+	opts.on("-s", "--stdout", "Notify on stdout") do |v|
+		$options[:stdout] = true
+	end
+	
 	opts.on("-a", "--all", "Watch all save files, not only listed ones") do |v|
-		options[:all] = true
+		$options[:all] = true
 	end
 end.parse!
 
@@ -69,12 +87,9 @@ Dir.glob("#{ARGV[0]}/*.se1") do |savefile|
 	initial_message << "[#{savename}] player #{turn}#{itsyou}\n"
 end
 
-if options[:parse]
-	puts initial_message
-	exit
-end
+do_notification initial_message
 
-system("notify-send", initial_message)
+exit if $options[:parse]
 
 notifier.watch(ARGV[0], :moved_to, :close_write) do |event|
 	next unless event.name =~ /.se1$/
@@ -83,9 +98,9 @@ notifier.watch(ARGV[0], :moved_to, :close_write) do |event|
 	next unless turn
 	you = your_number(event.name)
 	
-	if $saves[event.name] != turn && (options[:all] || you == turn || you == :all)
+	if $saves[event.name] != turn && ($options[:all] || you == turn || you == :all)
 		itsyou = if you == turn then " (you)" else "" end
-		system("notify-send", "sewatcher: [#{event.name}] player #{turn}#{itsyou}")
+		do_notification "[#{event.name}] player #{turn}#{itsyou}"
 	end
 	$saves[event.name] = turn
 end
