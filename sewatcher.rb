@@ -109,7 +109,7 @@ notifier.watch(ARGV[0], :moved_to, :close_write) do |event|
 		if $options[:stdout_others] && you != turn
 			puts notification
 		else
-			do_notification
+			do_notification notification
 		end
 	end
 	$saves[event.name] = turn
