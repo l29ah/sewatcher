@@ -62,6 +62,12 @@ OptionParser.new do |opts|
 	opts.on("-a", "--all", "Display all turns, not only yours") do |v|
 		$options[:all] = true
 	end
+	
+	opts.on("-w", "--watch", "Like --all, but display others' turns only on stdout. Implies --all, --stdout") do |v|
+		$options[:all] = true
+		$options[:stdout] = true
+		$options[:stdout_others] = true
+	end
 end.parse!
 
 notifier = INotify::Notifier.new
@@ -97,10 +103,14 @@ notifier.watch(ARGV[0], :moved_to, :close_write) do |event|
 	turn = get_turn(fname)
 	next unless turn
 	you = your_number(event.name)
-	
 	if $saves[event.name] != turn && ($options[:all] || you == turn || you == :all)
 		itsyou = if you == turn then " (you)" else "" end
-		do_notification "[#{event.name}] player #{turn}#{itsyou}"
+		notification = "[#{event.name}] player #{turn}#{itsyou}"
+		if $options[:stdout_others] && you != turn
+			puts notification
+		else
+			do_notification
+		end
 	end
 	$saves[event.name] = turn
 end
