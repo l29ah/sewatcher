@@ -59,7 +59,7 @@ OptionParser.new do |opts|
 		$options[:stdout] = true
 	end
 	
-	opts.on("-a", "--all", "Watch all save files, not only listed ones") do |v|
+	opts.on("-a", "--all", "Display all turns, not only yours") do |v|
 		$options[:all] = true
 	end
 end.parse!
