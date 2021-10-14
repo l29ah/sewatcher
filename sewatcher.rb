@@ -92,7 +92,7 @@ config["games"].each do |game|
 		dir = fullname.dirname.to_s
 		filename = fullname.to_s
 		notifier.watch(dir, :moved_to, :close_write) do |event|
-			event_filename = Pathname.new("#{ARGV[0]}/#{event.name}").expand_path.to_s
+			event_filename = Pathname.new("#{dir}/#{event.name}").expand_path.to_s
 			next unless event_filename == filename
 			turn = get_turn(filename)
 			next unless turn
