@@ -1,0 +1,11 @@
+games:
+  -
+    # Will be shown to you in notification if present
+    name: "Game 1"
+    # Save game file
+    file: /home/user/segames/game1.se1
+    # First player's number is 2
+    turn: 3
+  -
+    file: /home/user/segames/game5.se1
+    turn: 4

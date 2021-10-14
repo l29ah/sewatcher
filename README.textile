@@ -10,12 +10,12 @@ h2. How to use
 
 1. Set up synchronization of saves (savedgames in SE folder, or a subfolder) across all players
 2. Set up a new PBEM game and save+quit. Last player will be the one processing AI, so it's better to make sure they have a beefy machine.
-3. Run sewatcher like this: @ruby sewatcher.rb <path_to_saves> <savename:playernumber>@ where playernumber is your number (first one is 2). Multiple savename:playernumber combos are also supported.
+3. Run sewatcher like this: @ruby sewatcher.rb config.yml@. Example of config: "example.yml":example.yml
 4. You will be notified when it's your turn, just load game, make your turn and save to the same file. 
 
 h2. How it works
 
-This Linux tool watches a directory given as first argument for changes to .se1 files, parses save files when they arrive for turn number, and notifies you using @notify-send@ when your turn is up. To be notified of your turn only, add strings like "save.se1:3" to your command line, where "save.se1" is save name and 3 is your number.
+This Linux tool watches a directory given as first argument for changes to .se1 files, parses save files when they arrive for turn number, and notifies you using @notify-send@ and/or STDOUT when your turn is up.
 
 h2. Requirements
 
