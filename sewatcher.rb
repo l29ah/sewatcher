@@ -56,8 +56,9 @@ OptionParser.new do |opts|
 		$options[:stdout] = true
 	end
 	
-	opts.on("-V", "--verbose", "Notify about all turn changes on stdout") do |v|
+	opts.on("-V", "--verbose", "Notify about all turn changes on stdout. Implies --stdout") do |v|
 		$options[:verbose] = true
+		$options[:stdout] = true
 	end
 end.parse!
 
