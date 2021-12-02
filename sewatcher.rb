@@ -55,6 +55,10 @@ OptionParser.new do |opts|
 	opts.on("-s", "--stdout", "Notify on stdout") do |v|
 		$options[:stdout] = true
 	end
+	
+	opts.on("-V", "--verbose", "Notify about all turn changes on stdout") do |v|
+		$options[:verbose] = true
+	end
 end.parse!
 
 config = YAML.load_file(ARGV[0])
@@ -96,15 +100,15 @@ config["games"].each do |game|
 			next unless event_filename == filename
 			turn = get_turn(filename)
 			next unless turn
-			itsyou = if game["turn"] == turn then " (you)" else "" end
+			next unless ($saves[filename] != turn) 
+			yourturn = (game["turn"] == turn)
+			itsyou = yourturn ? " (you)" : ""
 			notification = "[#{game["name"] || filename}] player #{turn}#{itsyou}"
-			if $saves[filename] != turn && game["turn"] == turn
-				if $options[:stdout]
-					puts notification
-				end
-				if !$options[:no_notify]
-					do_notification notification
-				end
+			if $options[:stdout] && (yourturn || $options[:verbose])
+				puts notification
+			end
+			if !$options[:no_notify] && yourturn
+				do_notification notification
 			end
 			$saves[filename] = turn
 		end
