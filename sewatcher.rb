@@ -33,11 +33,11 @@ def your_number(savefile)
 	$mynumbers[savefile]
 end
 
-def do_notification(text)
-	if $options[:stdout]
+def do_notification(text, notify)
+	if $options[:stdout] && (notify || $options[:verbose])
 		puts text
 	end
-	if !$options[:no_notify]
+	if !$options[:no_notify] && notify
 		system("notify-send", "sewatcher: #{text}")
 	end
 end
@@ -85,7 +85,7 @@ config["games"].each do |game|
 	initial_message << "[#{game["name"] || filename}] player #{turn}#{itsyou}\n"
 end
 
-do_notification initial_message
+do_notification initial_message, true
 
 exit if $options[:parse]
 
@@ -105,12 +105,7 @@ config["games"].each do |game|
 			yourturn = (game["turn"] == turn)
 			itsyou = yourturn ? " (you)" : ""
 			notification = "[#{game["name"] || filename}] player #{turn}#{itsyou}"
-			if $options[:stdout] && (yourturn || $options[:verbose])
-				puts notification
-			end
-			if !$options[:no_notify] && yourturn
-				do_notification notification
-			end
+			do_notification notification, yourturn
 			$saves[filename] = turn
 		end
 	end
