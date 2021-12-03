@@ -36,6 +36,7 @@ end
 def do_notification(text, notify)
 	if $options[:stdout] && (notify || $options[:verbose])
 		puts text
+		STDOUT.flush
 	end
 	if !$options[:no_notify] && notify
 		system("notify-send", "sewatcher: #{text}")
