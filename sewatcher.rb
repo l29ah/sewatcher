@@ -47,7 +47,7 @@ end
 $options = {}
 OptionParser.new do |opts|
 	opts.banner = "Notifies you of new turns in Shadow Empire games in given dirs.
-	Usage: #{$0} [$options] <savedir> [<savename:playerno> ...]"
+	Usage: #{$0} [options] <config.yml>"
 	
 	opts.on("-n", "--no-notify", "Don't notify-send") do |v|
 		$options[:no_notify] = true
