@@ -43,7 +43,6 @@ def do_notification(text, notify)
 	end
 end
 
-
 $options = {}
 OptionParser.new do |opts|
 	opts.banner = "Notifies you of new turns in Shadow Empire games in given dirs.
@@ -82,12 +81,15 @@ end
 initial_message = "sewatcher initialized\n"
 
 config["games"].each do |game|
+	game["nicks"] ||= {}
 	filename = Pathname::new(game["file"]).expand_path.to_s
 	turn = get_turn(filename)
+	nick = game["nicks"][turn]
+	nickstring = if nick then " - #{nick}" else "" end
 	next unless turn
 	itsyou = if game["turn"] == turn then " (you)" else "" end
 	$saves[filename] = turn
-	initial_message << "[#{game["name"] || filename}] player #{turn}#{itsyou}\n"
+	initial_message << "[#{game["name"] || filename}] player #{turn}#{nickstring}#{itsyou}\n"
 end
 
 do_notification initial_message, true
@@ -107,9 +109,11 @@ config["games"].each do |game|
 			turn = get_turn(filename)
 			next unless turn
 			next unless ($saves[filename] != turn) 
+			nick = game["nicks"][turn]
+			nickstring = if nick then " - #{nick}" else "" end
 			yourturn = (game["turn"] == turn)
 			itsyou = yourturn ? " (you)" : ""
-			notification = "[#{game["name"] || filename}] player #{turn}#{itsyou}"
+			notification = "[#{game["name"] || filename}] player #{turn}#{nickstring}#{itsyou}"
 			do_notification notification, yourturn
 			$saves[filename] = turn
 		end
