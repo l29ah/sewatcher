@@ -53,6 +53,10 @@ OptionParser.new do |opts|
 		$options[:no_notify] = true
 	end
 	
+	opts.on("-p", "--parse", "Parse files once, then exit") do |v|
+		$options[:parse] = true
+	end
+	
 	opts.on("-s", "--stdout", "Notify on stdout") do |v|
 		$options[:stdout] = true
 	end
