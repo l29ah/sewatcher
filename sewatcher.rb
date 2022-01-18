@@ -13,7 +13,7 @@ def get_savename(filename)
 end
 
 def get_turn(filename)
-	out, err, status = Open3.capture3("unzip", "-c", "-P", "GarfieldJonesCat", filename)
+	out, _, status = Open3.capture3("unzip", "-c", "-P", "GarfieldJonesCat", filename)
 
 	if !status.success?
 		# it's not a save yet, likely
@@ -95,8 +95,6 @@ end
 do_notification initial_message, true
 
 exit if $options[:parse]
-
-threads = []
 
 config["games"].each do |game|
 	Thread.new do
