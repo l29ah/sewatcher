@@ -108,14 +108,19 @@ config["games"].each do |game|
 			next unless event_filename == filename
 			turn = get_turn(filename)
 			next unless turn
-			next unless ($saves[filename] != turn) 
 			nick = game["nicks"][turn]
 			nickstring = if nick then " - #{nick}" else "" end
 			yourturn = (game["turn"] == turn)
 			itsyou = yourturn ? " (you)" : ""
-			notification = "[#{game["name"] || filename}] player #{turn}#{nickstring}#{itsyou}"
+			if ($saves[filename] == turn)
+				next unless $options[:verbose]
+				reopened = " (reopened)"
+			else
+				reopened = ""
+				$saves[filename] = turn
+			end
+			notification = "[#{game["name"] || filename}] player #{turn}#{nickstring}#{itsyou}#{reopened}"
 			do_notification notification, yourturn
-			$saves[filename] = turn
 		end
 	end
 end
