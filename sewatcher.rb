@@ -113,6 +113,7 @@ config["games"].each do |game|
 			if ($saves[filename] == turn)
 				next unless $options[:verbose]
 				reopened = " (reopened)"
+				yourturn = false
 			else
 				reopened = ""
 				$saves[filename] = turn
