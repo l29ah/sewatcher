@@ -5,7 +5,12 @@ games:
     # Save game file
     file: /home/user/segames/game1.se1
     # First player's number is 2
-    turn: 3
+    turn: 4
+    # Put player names here to display them
+    nicks:
+      2: Slowpoke
+      3: Absentee
+      4: Me
   -
     file: /home/user/segames/game5.se1
     turn: 4
