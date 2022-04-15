@@ -52,6 +52,10 @@ OptionParser.new do |opts|
 		$options[:parse] = true
 	end
 	
+	opts.on("-r", "--read") do |v|
+		$options[:read] = true
+	end
+	
 	opts.on("-s", "--stdout", "Notify on stdout") do |v|
 		$options[:stdout] = true
 	end
@@ -61,6 +65,14 @@ OptionParser.new do |opts|
 		$options[:stdout] = true
 	end
 end.parse!
+
+if $options[:read]
+	ARGV.each do |arg|
+		turn = get_turn(arg)
+		puts "#{arg} #{turn}"
+	end
+	exit 0
+end
 
 config = YAML.load_file(ARGV[0])
 notifier = INotify::Notifier.new
