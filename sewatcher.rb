@@ -29,10 +29,6 @@ def get_turn(filename)
 	out[turn_pos].ord
 end
 
-def your_number(savefile)
-	$mynumbers[savefile]
-end
-
 def do_notification(text, notify)
 	if $options[:stdout] && (notify || $options[:verbose])
 		puts text
@@ -70,13 +66,7 @@ config = YAML.load_file(ARGV[0])
 notifier = INotify::Notifier.new
 
 $saves = Hash.new
-$mynumbers = Hash.new
 
-ARGV[1..-1].each do |myn|
-	save,number = myn.split(":")
-	number = :any if !number
-	$mynumbers[save] = number.to_i
-end
 
 initial_message = "sewatcher initialized\n"
 
